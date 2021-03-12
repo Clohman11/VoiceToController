@@ -1,0 +1,53 @@
+{
+  "type": "start_request",
+  "insightTypes": ["question", "action_item"],
+  "config": {
+    "confidenceThreshold": 0.9,
+    "languageCode": "en-US",
+    "speechRecognition": {
+      "encoding": "LINEAR16",
+      "sampleRateHertz": 16000
+    }
+  },
+  "speaker": {
+    "userId": "jane.doe@example.com",
+    "name": "Jane"
+  }
+
+
+}
+
+const handleSuccess = function(stream) {
+    const context = new AudioContext();
+    const source = context.createMediaStreamSource(stream);
+    const processor = context.createScriptProcessor(1024, 1, 1);
+    source.connect(processor);
+    processor.connect(context.destination);
+    processor.onaudioprocess = function(e) {
+      // convert to 16-bit payload
+      const inputData = e.inputBuffer.getChannelData(0) || new Float32Array(this.options.bufferSize);
+      const targetBuffer = new Int16Array(inputData.length);
+      for (let index = inputData.length; index > 0; index--)
+          targetBuffer[index] = 32767 * Math.min(1, inputData[index]);
+      // Send to websocket
+      if(ws.readyState === WebSocket.OPEN){
+          ws.send(targetBuffer.buffer);
+      }
+    };
+  };
+
+  navigator.mediaDevices.getUserMedia({ audio: true, video: false })
+    .then(handleSuccess);
+
+  // Schedule the stop of the client after 2 minutes (120 sec)
+  setTimeout(() => {
+    // Send stop request
+    ws.send(JSON.stringify({
+      "type": "stop_request"
+    }));
+    ws.close();
+  }, 120000);
+
+  {
+    "type": "stop_request"
+  }
