@@ -1,15 +1,16 @@
 import pyvjoy
-import js2py #https://github.com/PiotrDabkowski/Js2Py
+#import js2py #https://github.com/PiotrDabkowski/Js2Py
 #use vJoy
 
 class Controller:
 #Setup the controller in vJoy
-    def __init__():
-        p1 = setup(1)
+    def __init__(self):
+        self.p1 = setup(1)
+        main()
 
     def setup(Num):
         done = False
-        while done = False:
+        while done == False:
             try:
                 Controller = pyvjoy.VJoyDevice(Num)
                 done = True
@@ -22,4 +23,5 @@ class Controller:
     def reset():
         p1.reset()
 
-    p1.set_button(2,1)
+    def main():
+        p1.set_button(2,1)
