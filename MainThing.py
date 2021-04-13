@@ -31,7 +31,12 @@ def Main():
     file = open(filestring,w+)
     file.close
     record = sr.AudioFile(filestring)
-    with record as asource:
-        audio = r.record(asource)
+
+    exit= False
+    while exit == False
+        with record as asource:
+            r.adjust_for_ambient_noise(asource)
+            audio = r.record(asource)
+        r.recognize_sphinx(audio)
 
 if __name__ == "__main__":Main()
