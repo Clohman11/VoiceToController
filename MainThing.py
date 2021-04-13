@@ -1,12 +1,12 @@
 import Controller
-#import StreamingVoice.js
-
+import speech_recognition as sr
 from Naked.toolshed.shell import execute_js, muterun_js
+from datetime import datetime
 
 class V2Input:
     def __init__(self):
         self.Control = Controller()
-        Main()
+
     #Turn a voice command into a single button press
     def Single_ButtonPress():
         print('but')
@@ -19,18 +19,19 @@ class V2Input:
     def Reset():
         print('but')
 
-def CommandCatcher(VData):
-    print(VData)
-
+    def CommandCatcher(VData):
+        print(VData)
 
     #Main run loop
 def Main():
-    #run StreamingVoice.js to create the audio input and stream
-    response = execute_js('StreamingVoice.js')
-    #if response.exitcode == 0:
-    #    print(response.stdout)
-    #else:
-      # sys.stderr.write(response.stderr)
-    print(response)
+    buttons = V2Input()
+    now = datetime.now()
+    dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
+    filestring = dt_string + 'RecordingFile' +.wav
+    file = open(filestring,w+)
+    file.close
+    record = sr.AudioFile(filestring)
+    with record as asource:
+        audio = r.record(asource)
 
 if __name__ == "__main__":Main()
